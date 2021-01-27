@@ -11,7 +11,7 @@ This is a Pomodoro countdown app. We are to add buttons for different countdowns
 - [ ] Artistic freedom for layout?.
 - [ ] Push new branch feature/Seekbar to Git. Get CR & Submit PR link.
 
-- v1.1.0
+- v1.1.0 - Not Published.
 - [x] Download project template.
 - [x] Add buttons for 30, 60, 90 and 120 minute countdown.
 - [x] Fix bug with multiple countdown starting simultaneously.
