@@ -4,7 +4,7 @@
 This is a Pomodoro countdown app. We are to add buttons for different countdowns and fix a bug.
 
 ## Task List:
--v1.2.0
+- v1.2.0
 - [ ] Add Seekbar for time interval, 15 to 300 minutes.
 - [ ] Another Seekbar for paused duration.
 - [ ] Number of repititions in EditText widget.
