@@ -4,27 +4,160 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/cardview_dark_background"
     tools:context=".MainActivity">
+
 
     <TextView
         android:id="@+id/countDownView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/default_time_display"
+        android:text="@string/defaultTimeDisplay"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.324"
+        android:textSize="150px"/>
 
     <Button
         android:id="@+id/startCountdownButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="177dp"
+        android:layout_height="51dp"
         android:text="@string/startButtonText"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/countDownView" />
+        app:layout_constraintTop_toBottomOf="@+id/countDownView"
+        app:layout_constraintVertical_bias="0.727" />
 
+    <SeekBar
+        android:id="@+id/seekBarStart"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="26dp"
+        android:max="300"
+        android:min="15"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/workTimeDuration"
+        app:layout_constraintHorizontal_bias="0.197"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countDownView"
+        app:layout_constraintVertical_bias="0.14" />
+
+    <SeekBar
+        android:id="@+id/seekBarPause"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="36dp"
+        android:layout_marginEnd="26dp"
+        android:max="120"
+        android:min="0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/pauseTimeDuration"
+        app:layout_constraintHorizontal_bias="0.197"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countDownView"
+        app:layout_constraintVertical_bias="0.267" />
+
+    <EditText
+        android:id="@+id/repetitionText"
+        android:layout_width="67dp"
+        android:layout_height="45dp"
+        android:ems="10"
+        android:hint="0"
+        android:inputType="number"
+        android:text="@string/repetitionText"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.496"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countDownView"
+        app:layout_constraintVertical_bias="0.464" />
+
+    <TextView
+        android:id="@+id/isPausedText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="148dp"
+        android:text="@string/isPausedString"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/countDownView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/workTimeDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="65dp"
+        android:layout_marginBottom="1dp"
+        android:text="@string/workTime"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/seekBarStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/seekBarStart" />
+
+    <TextView
+        android:id="@+id/pauseTimeDuration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="65dp"
+        android:text="@string/pauseTime"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@+id/seekBarPause"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/seekBarPause" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="Worktime duration:"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/seekBarStart"
+        app:layout_constraintStart_toStartOf="@+id/seekBarStart" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Pausetime duration:"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/seekBarPause"
+        app:layout_constraintStart_toStartOf="@+id/seekBarPause" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="23dp"
+        android:layout_marginBottom="8dp"
+        android:text="Repetitions:"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toTopOf="@+id/repetitionText"
+        app:layout_constraintEnd_toEndOf="@+id/seekBarPause" />
+
+    <Button
+        android:id="@+id/stopCountdownButton"
+        android:layout_width="177dp"
+        android:layout_height="51dp"
+        android:text="@string/stopButtonText"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/countDownView"
+        app:layout_constraintVertical_bias="0.857" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
