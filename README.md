@@ -1,7 +1,7 @@
 # Pomodoro App!
 
 ## Introduction
-This is a Pomodoro countdown app. We are to add buttons for different countdowns and fix a bug.
+This is a Pomodoro countdown app. We are to modidy the project gives to us to complete assignments.
 
 ## Task List:
 - v1.2.0 - Published
