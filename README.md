@@ -7,7 +7,7 @@
 - [x] Make a new folder in repo named "Piano"
 - [x] Make new AS project in Piano folder
 - [x] Commit new project
-- [x] New feature branch for upcoming work
+- [x] New feature branch for upcoming work - feature/piano
 - [ ] Recreate app from lecture
       - Activity, PianoLayout, FullTonePianoKey
       - Communication between fragments
