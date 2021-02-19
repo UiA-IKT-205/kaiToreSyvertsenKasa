@@ -8,12 +8,12 @@
 - [x] Make new AS project in Piano folder
 - [x] Commit new project
 - [x] New feature branch for upcoming work
-- [] Recreate app from lecture
+- [ ] Recreate app from lecture
       - Activity, PianoLayout, FullTonePianoKey
       - Communication between fragments
-- [] Add halftone buttons and give them same functions as fulltone
-- [] Make a PR and have someone do a CR
-- [] Deliver PR link on Canvas.
+- [ ] Add halftone buttons and give them same functions as fulltone
+- [ ] Make a PR and have someone do a CR
+- [ ] Deliver PR link on Canvas.
 
 
 
