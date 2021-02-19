@@ -1,3 +1,24 @@
+# Piano Master!
+
+## Master your piano skills in no time with this innovative app!
+
+## To-do:
+-v1.1.0 - Not Published
+- [x] Make a new folder in repo named "Piano"
+- [x] Make new AS project in Piano folder
+- [x] Commit new project
+- [x] New feature branch for upcoming work
+- [] Recreate app from lecture
+      - Activity, PianoLayout, FullTonePianoKey
+      - Communication between fragments
+- [] Add halftone buttons and give them same functions as fulltone
+- [] Make a PR and have someone do a CR
+- [] Deliver PR link on Canvas.
+
+
+
+
+
 # Pomodoro App!
 
 ## Introduction
