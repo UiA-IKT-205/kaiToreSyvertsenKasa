@@ -3,7 +3,7 @@
 ## Master your piano skills in no time with this innovative app!
 
 ## To-do:
--v1.1.0 - Not Published
+- v1.1.0 - Not Published
 - [x] Make a new folder in repo named "Piano"
 - [x] Make new AS project in Piano folder
 - [x] Commit new project
