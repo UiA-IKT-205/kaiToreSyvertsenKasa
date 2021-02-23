@@ -3,17 +3,22 @@
 ## Master your piano skills in no time with this innovative app!
 
 ## To-do:
-- v1.1.0 - Not Published
+- v1.1.0 -  PR Opened
 - [x] Make a new folder in repo named "Piano"
 - [x] Make new AS project in Piano folder
 - [x] Commit new project
 - [x] New feature branch for upcoming work - feature/piano
-- [ ] Recreate app from lecture
+- [x] Recreate app from lecture
       - Activity, PianoLayout, FullTonePianoKey
       - Communication between fragments
-- [ ] Add halftone buttons and give them same functions as fulltone
-- [ ] Make a PR and have someone do a CR
-- [ ] Deliver PR link on Canvas.
+- [x] Add halftone buttons and give them same functions as fulltone
+- [x] Make a PR and have someone do a CR
+- [x] Deliver PR link on Canvas.
+
+## Additional Features:
+- [x] Splash Screen
+- [ ] HashMap - Can't figure out how to give each note in a forEach a value like that
+- [ ] SoundPool - Can't get SoundPool to load with HashMap when no keys get a value
 
 
 
