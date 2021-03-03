@@ -1,26 +1,22 @@
 package com.example.pianomaster
 
-import android.app.Activity
-import android.app.TaskStackBuilder.create
-import android.content.Context
-import android.content.Context.AUDIO_SERVICE
-import android.media.AudioManager
-import android.media.SoundPool
+import android.os.Build
 import android.os.Bundle
-import android.util.SparseArray
-import android.view.Gravity.apply
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat.getSystemService
-import androidx.core.view.GravityCompat.apply
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.pianomaster.databinding.FragmentPianoBinding
-import kotlinx.android.synthetic.main.fragment_full_tone_piano_key.view.*
-import kotlinx.android.synthetic.main.fragment_half_tone_piano_key.view.*
+import data.Note
+import kotlinx.android.synthetic.main.fragment_piano.*
 import kotlinx.android.synthetic.main.fragment_piano.view.*
-import java.net.URI.create
-import java.util.Currency.getInstance
+import java.io.File
+import java.io.FileOutputStream
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class PianoLayout : Fragment() {
 
@@ -32,11 +28,16 @@ class PianoLayout : Fragment() {
     //Creating a list of Half Notes
     private val halfTones = listOf("C#", "D#", "F#", "G#", "A#", "C#2", "D#2", "F#2", "G#2", "A#2")
 
+    private var noteSheet:MutableList<Note> = mutableListOf<Note>() // MutableList, not to be confused with List.
+
+    private var activeRecording:Boolean = false // To keep track of active recording in if's, when's and else's.
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -53,13 +54,29 @@ class PianoLayout : Fragment() {
                 fullTones.forEach {
                     val fullTonePianoKey = FullTonePianoKeyFragment.newInstance(it)
 
-                    fullTonePianoKey.onKeyDown = {
-                        println("Piano key down $it")
+                    // Variables to track time played.
+                    var startPlay:Long = 0
+                    var fullToneStartTime = ""
+
+                    // Variables to track time played.
+                    fullTonePianoKey.onKeyDown = { note ->
+                        startPlay = System.nanoTime()
+                        val currentTime = LocalDateTime.now()
+                        fullToneStartTime = currentTime.format(DateTimeFormatter.ISO_TIME)
+                        println("Piano key down $note at $fullToneStartTime")
 
                     }
 
+                    // Uses the device time instead, so time is accurate.
                     fullTonePianoKey.onKeyUp = {
-                        println("Piano key up $it")
+                        val endPlay = System.nanoTime()
+                        var fullToneTotalTime:Double
+                        var fullToneTime: Long
+                        fullToneTime = endPlay - startPlay
+                        fullToneTotalTime = fullToneTime.toDouble() / 1000000000 // Converts nano to seconds
+                        val note = Note(it, startPlay, fullToneTotalTime)
+                        noteSheet.add(note)
+                        println("Piano key up $note, Started $fullToneStartTime Lasted $fullToneTotalTime, RAW nano = $fullToneTime and seconds = $fullToneTotalTime")
 
                     }
                     fragmentTransaction.add(view.fullToneKeyLayout.id, fullTonePianoKey, "note_$it")
@@ -68,17 +85,92 @@ class PianoLayout : Fragment() {
                 halfTones.forEach {
                     val halfTonePianoKey = HalfTonePianoKeyFragment.newInstance(it)
 
-                    halfTonePianoKey.onKeyDown = {
-                        println("Piano key down $it")
+                    // Variables to track time played.
+                    var startPlay:Long = 0
+                    var fullToneStartTime = ""
+
+                    // Starts recording time on key pressed.
+                    halfTonePianoKey.onKeyDown = {  note ->
+                        startPlay = System.nanoTime()
+                        val currentTime = LocalDateTime.now()
+                        fullToneStartTime = currentTime.format(DateTimeFormatter.ISO_TIME)
+                        println("Piano key down $note at $fullToneStartTime")
                     }
 
+                    // Uses the device time instead, so time is accurate.
                     halfTonePianoKey.onKeyUp = {
-                        println("Piano key up $it")
+                        val endPlay = System.nanoTime()
+                        var fullToneTotalTime:Double
+                        var fullToneTime:Long
+                        fullToneTime = endPlay - startPlay
+                        fullToneTotalTime = fullToneTime.toDouble() / 1000000000 // Converts nano to seconds
+                        val note = Note(it, startPlay, fullToneTotalTime)
+                        noteSheet.add(note)
+                        println("Piano key up $note, Started $fullToneStartTime Lasted $fullToneTotalTime, RAW nano = $fullToneTime and seconds = $fullToneTotalTime")
                     }
                     fragmentTransaction.add(view.halfToneKeyLayout.id, halfTonePianoKey, "note_$it")
         }
         fragmentTransaction.commit()
+
+        // Uses a record button to save notes from start to end.
+        view.recordButton.setOnClickListener{
+            if(!activeRecording){
+                noteSheet.clear()
+                startRecordTime()
+                recordButton.text = "Stop Recording"
+            } else {
+                stopRecordTime()
+                recordButton.text = "Reset Recording"
+            }
+        }
+        view.saveScoreBt.setOnClickListener {
+            var fileName = view.fileNameTextEdit.text.toString()
+            val path = this.activity?.getExternalFilesDir(null)
+            val newNoteFile = (File(path, fileName))
+
+            when {
+                noteSheet.count() == 0 -> Toast.makeText(activity, "Forgot notes? Did you click by mistake?", Toast.LENGTH_SHORT).show()
+                fileName.isEmpty() -> Toast.makeText(activity, "Forgot filename?", Toast.LENGTH_SHORT).show()
+                path == null -> Toast.makeText(activity, "Are you sure this is the right path?", Toast.LENGTH_SHORT).show()
+                newNoteFile.exists() -> Toast.makeText(activity, "You already did this one!", Toast.LENGTH_SHORT).show()
+
+                // If nothing is wrong, goes ahead with making a new file.
+                else -> {
+                    fileName = "$fileName.txt"
+                    FileOutputStream(newNoteFile, true).bufferedWriter().use { writer ->
+                        noteSheet.forEach {
+                            writer.write("${it.toString()}\n")
+                        }
+                    }
+                    // After a save, compliments you and clears the current notesheet.
+                    Toast.makeText(activity, "Great job, Beethoven! Your file was successful.", Toast.LENGTH_SHORT).show()
+                    noteSheet.clear()
+                    FileOutputStream(newNoteFile).close() // Close for not "uvøren lukking" of file
+
+
+                    // Gives confirmation if the name file has been saved with the right name and path.
+                    println("File saves as $fileName at $path/$fileName")
+                }
+            }
+        }
         return view
+    }
+    // Function for starting a new recording.
+    private fun startRecordTime() {
+        if (!activeRecording){
+            timeRecordingChrono.base = SystemClock.elapsedRealtime()
+            timeRecordingChrono.start()
+            activeRecording = true
+        }
+    }
+    // Function for stopping the current recording.
+    private fun stopRecordTime() {
+        if (activeRecording) {
+            timeRecordingChrono.stop()
+            activeRecording = false
+        }
     }
 
 }
+
+//private fun String.isEmpty(): Boolean { return isEmpty() }
