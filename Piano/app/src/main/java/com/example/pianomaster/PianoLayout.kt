@@ -74,7 +74,7 @@ class PianoLayout : Fragment() {
                         var fullToneTime: Long
                         fullToneTime = endPlay - startPlay
                         fullToneTotalTime = fullToneTime.toDouble() / 1000000000 // Converts nano to seconds
-                        val note = Note(it, startPlay, fullToneTotalTime)
+                        val note = Note(it, fullToneStartTime, fullToneTotalTime)
                         noteSheet.add(note)
                         println("Piano key up $note, Started $fullToneStartTime Lasted $fullToneTotalTime, RAW nano = $fullToneTime and seconds = $fullToneTotalTime")
 
@@ -104,7 +104,7 @@ class PianoLayout : Fragment() {
                         var fullToneTime:Long
                         fullToneTime = endPlay - startPlay
                         fullToneTotalTime = fullToneTime.toDouble() / 1000000000 // Converts nano to seconds
-                        val note = Note(it, startPlay, fullToneTotalTime)
+                        val note = Note(it, fullToneStartTime, fullToneTotalTime)
                         noteSheet.add(note)
                         println("Piano key up $note, Started $fullToneStartTime Lasted $fullToneTotalTime, RAW nano = $fullToneTime and seconds = $fullToneTotalTime")
                     }
@@ -136,16 +136,16 @@ class PianoLayout : Fragment() {
 
                 // If nothing is wrong, goes ahead with making a new file.
                 else -> {
-                    fileName = "$fileName.txt"
+                    fileName = "$fileName.music"
                     FileOutputStream(newNoteFile, true).bufferedWriter().use { writer ->
                         noteSheet.forEach {
                             writer.write("${it.toString()}\n")
                         }
+                        FileOutputStream(newNoteFile).close()
                     }
                     // After a save, compliments you and clears the current notesheet.
                     Toast.makeText(activity, "Great job, Beethoven! Your file was successful.", Toast.LENGTH_SHORT).show()
                     noteSheet.clear()
-                    FileOutputStream(newNoteFile).close() // Close for not "uvøren lukking" of file
 
 
                     // Gives confirmation if the name file has been saved with the right name and path.
