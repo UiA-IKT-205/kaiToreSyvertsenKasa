@@ -48,8 +48,25 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/lagre"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/fileNameTextEdit"
         app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <Button
+        android:id="@+id/recordButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/timeRecordingChrono"
+        android:text="Record"/>
+
+    <Chronometer
+        android:id="@+id/timeRecordingChrono"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="100dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/saveScoreBt"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

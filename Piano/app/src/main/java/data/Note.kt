@@ -1,8 +1,8 @@
 package data
 
-data class Note(val value:String, val start:Long, val end:Long){
+data class Note(val value:String, val start:Long, val end: Double){
 
     override fun toString(): String {
-        return "$value,$start,$end"
+        return "Note: $value, Started: $start, Ended: $end"
     }
 }
