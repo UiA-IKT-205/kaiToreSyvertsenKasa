@@ -129,30 +129,38 @@ class PianoLayout : Fragment() {
         }
         view.saveScoreBt.setOnClickListener {
             var fileName = view.fileNameTextEdit.text.toString()
-            if (noteSheet.count() > 0 && fileName.isNotEmpty()) {
-                fileName = "$fileName.music"
-                val content: String = noteSheet.map {
-                    it.toString()
-                }.reduce { acc, s -> acc + s + "\n" }
-                saveFile(fileName, content)
+            val path = this.activity?.getExternalFilesDir(null)
+
+
+            when {
+                noteSheet.count() == 0 -> Toast.makeText(activity, "Forgot notes? Did you click by mistake?", Toast.LENGTH_SHORT).show()
+                fileName.isEmpty() -> Toast.makeText(activity, "Forgot filename?", Toast.LENGTH_SHORT).show()
+                path == null -> Toast.makeText(activity, "Are you sure this is the right path?", Toast.LENGTH_SHORT).show()
+
+                // If nothing is wrong, goes ahead with making a new file.
+                else -> {
+                    fileName = "$fileName.music"
+                    val file = File(path,fileName)
+                    FileOutputStream(file, true).bufferedWriter().use { writer ->
+                        noteSheet.forEach {
+                            writer.write("${it.toString()}\n")
+                        }
+                        this.onSave?.invoke(file.toUri())
+                        FileOutputStream(file).close()
+
+                    }
+                    // After a save, compliments you and clears the current notesheet.
+                    Toast.makeText(activity, "Great job, Beethoven! Your file was successful.", Toast.LENGTH_SHORT).show()
+                    noteSheet.clear()
+                    this.onSave?.invoke(file.toUri())
+
+
+                    // Gives confirmation if the name file has been saved with the right name and path.
+                    println("File saves as $fileName at $path/$fileName")
+                }
             }
-
-
         }
         return view
-    }
-
-    private fun saveFile(fileName: String, content: String) {
-        val path = this.activity?.getExternalFilesDir(null)
-
-        if (path != null) {
-            val file = File(path, fileName)
-            FileOutputStream(file, true).bufferedWriter().use { writer ->
-                writer.write(content)
-            }
-
-            this.onSave?.invoke(file.toUri())
-        }
     }
     // Function for starting a new recording.
     private fun startRecordTime() {
