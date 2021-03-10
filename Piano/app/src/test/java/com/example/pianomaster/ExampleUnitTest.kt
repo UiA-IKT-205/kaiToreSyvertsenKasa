@@ -15,8 +15,3 @@ class ExampleUnitTest {
         assertEquals(4, 2 + 2)
     }
 }
-
-class PianoTest {
-    @Test
-    fun 
-}

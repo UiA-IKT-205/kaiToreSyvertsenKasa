@@ -1,5 +1,6 @@
 package com.example.pianomaster
 
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
@@ -8,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
 import com.example.pianomaster.databinding.FragmentPianoBinding
 import data.Note
@@ -19,6 +21,8 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 class PianoLayout : Fragment() {
+
+    var onSave:((file:Uri) -> Unit)? = null
 
     private var _binding: FragmentPianoBinding? = null
     private val binding get() = _binding!!
@@ -126,26 +130,29 @@ class PianoLayout : Fragment() {
         view.saveScoreBt.setOnClickListener {
             var fileName = view.fileNameTextEdit.text.toString()
             val path = this.activity?.getExternalFilesDir(null)
-            val newNoteFile = (File(path, fileName))
+
 
             when {
                 noteSheet.count() == 0 -> Toast.makeText(activity, "Forgot notes? Did you click by mistake?", Toast.LENGTH_SHORT).show()
                 fileName.isEmpty() -> Toast.makeText(activity, "Forgot filename?", Toast.LENGTH_SHORT).show()
                 path == null -> Toast.makeText(activity, "Are you sure this is the right path?", Toast.LENGTH_SHORT).show()
-                newNoteFile.exists() -> Toast.makeText(activity, "You already did this one!", Toast.LENGTH_SHORT).show()
 
                 // If nothing is wrong, goes ahead with making a new file.
                 else -> {
                     fileName = "$fileName.music"
-                    FileOutputStream(newNoteFile, true).bufferedWriter().use { writer ->
+                    val file = File(path,fileName)
+                    FileOutputStream(file, true).bufferedWriter().use { writer ->
                         noteSheet.forEach {
                             writer.write("${it.toString()}\n")
                         }
-                        FileOutputStream(newNoteFile).close()
+                        this.onSave?.invoke(file.toUri())
+                        FileOutputStream(file).close()
+
                     }
                     // After a save, compliments you and clears the current notesheet.
                     Toast.makeText(activity, "Great job, Beethoven! Your file was successful.", Toast.LENGTH_SHORT).show()
                     noteSheet.clear()
+                    this.onSave?.invoke(file.toUri())
 
 
                     // Gives confirmation if the name file has been saved with the right name and path.
@@ -170,7 +177,6 @@ class PianoLayout : Fragment() {
             activeRecording = false
         }
     }
-
 }
 
 //private fun String.isEmpty(): Boolean { return isEmpty() }
